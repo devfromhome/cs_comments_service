@@ -258,7 +258,23 @@ describe "app" do
             expected_order = @default_order
             actual_order.should == expected_order
           end
-          it "sorts using last activity / descending" do
+          it "sorts using last activity / descending when thread is updated" do
+            t5 = @threads["t5"]
+            t5.update(body: "changed!")
+            t5.save!
+            actual_order = thread_result_order("activity", "desc")
+            expected_order = @default_order
+            actual_order.should == expected_order
+          end
+          it "sorts using last activity / ascending when thread is updated" do
+            t5 = @threads["t5"]
+            t5.update(body: "changed!")
+            t5.save!
+            actual_order = thread_result_order("activity", "asc")
+            expected_order = @default_order.reverse
+            actual_order.should == expected_order
+          end
+          it "sorts using last activity / descending when comment is updated" do
             t5c = @threads["t5"].comments.first
             t5c.update(body: "changed!")
             t5c.save!
@@ -266,12 +282,32 @@ describe "app" do
             expected_order = @default_order
             actual_order.should == expected_order
           end
-          it "sorts using last activity / ascending" do
+          it "sorts using last activity / ascending when comment is updated" do
             t5c = @threads["t5"].comments.first
             t5c.update(body: "changed!")
             t5c.save!
             actual_order = thread_result_order("activity", "asc")
             expected_order = @default_order.reverse
+            actual_order.should == expected_order
+          end
+          it "sorts using last activity / descending when response is created" do
+            t5 = @threads["t5"]
+            comment = t5.comments.new(body: "this problem is so easy", course_id: "1")
+            comment.author = User.first
+            comment.save!
+
+            actual_order = thread_result_order("activity", "desc")
+            expected_order = move_to_front(@default_order, "t5")
+            actual_order.should == expected_order
+          end
+          it "sorts using last activity / ascending when response is created" do
+            t5 = @threads["t5"]
+            comment = t5.comments.new(body: "this problem is so easy", course_id: "1")
+            comment.author = User.first
+            comment.save!
+
+            actual_order = thread_result_order("activity", "asc")
+            expected_order = move_to_end(@default_order.reverse, "t5")
             actual_order.should == expected_order
           end
           it "sorts using vote count / descending" do
