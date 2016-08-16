@@ -258,7 +258,7 @@ describe "app" do
             expected_order = @default_order
             actual_order.should == expected_order
           end
-          it "sorts using last activity / descending when thread is updated" do
+          it "sort unchanged using last activity / descending when thread is updated" do
             t5 = @threads["t5"]
             t5.update(body: "changed!")
             t5.save!
@@ -266,7 +266,7 @@ describe "app" do
             expected_order = @default_order
             actual_order.should == expected_order
           end
-          it "sorts using last activity / ascending when thread is updated" do
+          it "sort unchanged using last activity / ascending when thread is updated" do
             t5 = @threads["t5"]
             t5.update(body: "changed!")
             t5.save!
@@ -274,7 +274,7 @@ describe "app" do
             expected_order = @default_order.reverse
             actual_order.should == expected_order
           end
-          it "sorts using last activity / descending when comment is updated" do
+          it "sort unchanged using last activity / descending when comment is updated" do
             t5c = @threads["t5"].comments.first
             t5c.update(body: "changed!")
             t5c.save!
@@ -282,7 +282,7 @@ describe "app" do
             expected_order = @default_order
             actual_order.should == expected_order
           end
-          it "sorts using last activity / ascending when comment is updated" do
+          it "sort unchanged using last activity / ascending when comment is updated" do
             t5c = @threads["t5"].comments.first
             t5c.update(body: "changed!")
             t5c.save!
